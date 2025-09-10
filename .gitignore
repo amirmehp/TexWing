@@ -24,4 +24,9 @@ local.properties
 # This Project
 test.txt
 macos
+macos/*
 src/.DS_Store
+build
+build/*
+dist
+dist/*
