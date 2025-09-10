@@ -1,0 +1,21 @@
+# Eclipse Stuff
+
+.settings/
+bin/
+tmp/
+.metadata
+.classpath
+.project
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.factorypath
+
+# Emacs Stuff
+*.java~
+*.java#
+#*
+*~
