@@ -19,3 +19,6 @@ local.properties
 *.java#
 #*
 *~
+
+# This Project
+test.txt

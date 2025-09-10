@@ -7,10 +7,10 @@ Not the most optimal thing but a good expriment
 
 ## For Now
 - [x] Can Create New Files
-- [ ] Can Open Files
-- [ ] Can Save Files
+- [x] Can Open Files
+- [x] Can Save Files (done for now but there are some problems)
 - [ ] Can "Save as"
 - [ ] Can Have Syntax Highlight
-- [ ] Can Run commands like Emacs
+- [x] Can Run commands like Emacs ( somehow works but I don't like it:(( )
 - [ ] Can Customize theme
 - [ ] Can Have Custom Syntax Highlight (made by user)
