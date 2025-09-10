@@ -28,5 +28,6 @@ macos/*
 src/.DS_Store
 build
 build/*
+build/Main
 dist
 dist/*
