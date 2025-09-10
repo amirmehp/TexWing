@@ -18,7 +18,7 @@ public class Main {
 	 public static void main(String args[]) {
 		 JFrame frame = new JFrame();
 		 frame.setTitle("TexWing");
-		 frame.setSize(1280, 720);
+		 frame.setSize(600, 400);
 		 frame.setResizable(true);
 		 frame.setForeground(new Color(0x181818));
 		 frame.setBackground(new Color(0xFFFFFF));
