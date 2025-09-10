@@ -19,7 +19,9 @@ local.properties
 *.java#
 #*
 *~
+.#*
 
 # This Project
 test.txt
 macos
+src/.DS_Store
