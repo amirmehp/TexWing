@@ -12,17 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 public class Gui extends JFrame{
 
@@ -33,6 +23,7 @@ public class Gui extends JFrame{
 		setResizable(true);
 		setForeground(new Color(0x181818));
 		setBackground(new Color(0xFFFFFF));
+		JTabbedPane tabbedPane = new JTabbedPane();
 		JTextPane editor = new JTextPane();
 		JScrollPane scrollPane = new JScrollPane(editor);
 		JTextField commandLine = new JTextField("");
@@ -67,7 +58,12 @@ public class Gui extends JFrame{
 		fileMenu.add(quitItem);
 		menuBar.add(fileMenu);
 		setJMenuBar(menuBar);
-		add(scrollPane, BorderLayout.CENTER);
+		JPanel tab1 = new JPanel();
+		tab1.setLayout(new BorderLayout());
+		tab1.add(scrollPane, BorderLayout.CENTER);
+		tabbedPane.addTab("tab",tab1);
+		tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);
+		add(tabbedPane);//TODO: make an array of open files and make tabs closable
 		commandPanel.add(commandLine, BorderLayout.CENTER);
 		commandPanel.add(commandOutPut, BorderLayout.SOUTH);
 		add(commandPanel, BorderLayout.SOUTH);
@@ -127,8 +123,7 @@ public class Gui extends JFrame{
 	private static String executeCommand(String command) {
 		StringBuilder output = new StringBuilder();
 		ProcessBuilder processBuilder = new ProcessBuilder();
-
-		// Use the appropriate shell based on the operating system
+		
 		if (System.getProperty("os.name").toLowerCase().contains("win")) {
 			processBuilder.command("cmd.exe", "/c", command);
 		} else {
@@ -136,7 +131,7 @@ public class Gui extends JFrame{
 		}
 
 		try {
-			processBuilder.redirectErrorStream(true); // Redirect error stream to input stream
+			processBuilder.redirectErrorStream(true); 
 			Process process = processBuilder.start();
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
