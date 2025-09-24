@@ -11,6 +11,7 @@ Not the most optimal thing but a good expriment
 - [x] Can Open Files
 - [x] Can Save Files (done for now but there are some problems)
 - [ ] Can "Save as"
+- [ ] Has tabs system fully implemented
 - [ ] Can Have Syntax Highlight
 - [x] Can Run commands like Emacs ( somehow works but I don't like it:(( )
 - [ ] Can Customize theme
