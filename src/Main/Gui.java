@@ -32,15 +32,42 @@ public class Gui extends JFrame{
 	JPanel commandPanel = new JPanel();
 	commandPanel.setLayout(new BorderLayout());
 	JLabel commandOutPut = new JLabel("Welcome to TexWing");
+
 	JMenuBar menuBar = new JMenuBar();
 	JMenu fileMenu = new JMenu("File");
+	JMenu editMenu = new JMenu("Edit");
 	JMenuItem newItem = new JMenuItem("New File");
 	JMenuItem openItem = new JMenuItem("Open File");
 	JMenuItem quitItem = new JMenuItem("Quit File");
 	JMenuItem saveItem = new JMenuItem("Save File");
+	JMenuItem nextTab = new JMenuItem("Next Tab");
+	JMenuItem prevTab = new JMenuItem("Previous Tab");
+
+	JTabbedPane tabbedPane = new JTabbedPane();
+	tabbedPane.setTabPlacement(JTabbedPane.BOTTOM);//TODO: make tabs closable
+	tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+	add(tabbedPane);
 	
 	newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-	newItem.addActionListener(e -> newFile(openFiles, this));
+	newItem.addActionListener(e -> newFile(openFiles, tabbedPane, this));
+        nextTab.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
+        nextTab.addActionListener(e -> {
+		if (tabbedPane.getSelectedIndex() + 1 < tabbedPane.getTabCount()){
+		    tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+		}else{
+		    tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);
+		}
+	    });
+	prevTab.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_DOWN_MASK));
+        prevTab.addActionListener(e -> {
+		if (tabbedPane.getSelectedIndex() - 1 > 0){
+		    tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() - 1);//TODO: Make this shit work
+		}else{
+		    tabbedPane.setSelectedIndex(tabbedPane.getSelectedIndex() + 1);
+		}
+	    });
+
 	// openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
 	// openItem.addActionListener(e -> openFile(editor, this));
 	// saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
@@ -59,7 +86,10 @@ public class Gui extends JFrame{
 	fileMenu.add(openItem);
 	fileMenu.add(saveItem);
 	fileMenu.add(quitItem);
+	editMenu.add(nextTab);
+	editMenu.add(prevTab);
 	menuBar.add(fileMenu);
+	menuBar.add(editMenu);
 	setJMenuBar(menuBar);
 	
 
@@ -71,20 +101,23 @@ public class Gui extends JFrame{
 		
     }
 
-    private static Object newFile(ArrayList openFiles, JFrame frame) {
+    private static Object newFile(ArrayList openFiles, JTabbedPane tabbedPane, JFrame frame) {
 	String path = saveFileDialog(frame);
 	try {
 	    File myFile = new File(path);
 	    boolean created = myFile.createNewFile();
             if (created) {
                 System.out.println("File created successfully");
-		openFiles.add(myFile.getName());
-		updateTabs(openFiles, frame);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(new JScrollPane(new JTextPane()), BorderLayout.CENTER);
+		tabbedPane.addTab(myFile.getName(), panel);
+		if (!openFiles.contains(myFile.getName())){
+		    openFiles.add(myFile.getName());
+		}
             } else {
                 System.out.println("File already exists");
             }
 	    
-
 	} catch (IOException e) {
 	    System.out.println("Err: Can't write to file");
 	    e.printStackTrace();
@@ -167,23 +200,6 @@ public class Gui extends JFrame{
 	int returnValue = fileChooser.showSaveDialog(frame);
 	if (returnValue == JFileChooser.APPROVE_OPTION) {
 	    return fileChooser.getSelectedFile().getAbsolutePath();
-	}
-	return null;
-    }
-    private static String updateTabs(ArrayList<String> openFiles, JFrame frame){
-	ArrayList<String> tabsMade = new ArrayList<String>();
-	
-	for (String t: openFiles){
-	    if (!tabsMade.contains(t)){
-		JPanel panel = new JPanel(new BorderLayout());
-		JTextPane editor = new JTextPane();
-		JScrollPane scrollPane = new JScrollPane(editor);
-		JTabbedPane tabbedPane = new JTabbedPane();
-		panel.add(scrollPane, BorderLayout.CENTER);
-		tabbedPane.addTab(t, panel);//TODO: make an array of open files and make tabs closable
-		frame.add(tabbedPane);
-		tabsMade.add(t);
-	    }
 	}
 	return null;
     }
