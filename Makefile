@@ -15,4 +15,4 @@ macos:
 	mkdir -p $(APP_NAME).app/Contents/Resources
 
 clean:
-	rm -rf build dist $(APP_NAME).jar
+	rm -rf build dist $(APP_NAME).jar #* *~ bin/*
