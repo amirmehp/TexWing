@@ -3,8 +3,8 @@ Cross-Platform Text Editor
 
 Not the most optimal thing but a good expriment
 
-![Screenshot](./screenshot.png)
-![Screenshot2](./screenshot2.png)
+![Screenshot MacOS](./screenshot.png)
+![Screenshot Linux](./screenshot2.png)
 
 ## For Now
 - [x] Can Create New Files
