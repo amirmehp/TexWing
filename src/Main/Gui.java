@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,17 +13,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.util.ArrayList;
-
-
 import javax.swing.*;
+
+
 
 public class Gui extends JFrame{
 
     public Gui(String title){
 	super(title);
-	ArrayList<String> openFiles = new ArrayList<String>();
-	openFiles.add("Test File");
-	openFiles.add("Test File 2");
+        ArrayList<Tab> tabs = new ArrayList<Tab>();
 	setTitle("TexWing");
 	setSize(600, 400);
 	setResizable(true);
@@ -50,7 +49,7 @@ public class Gui extends JFrame{
 	add(tabbedPane);
 	
 	newItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK));
-	newItem.addActionListener(e -> newFile(openFiles, tabbedPane, this));
+	newItem.addActionListener(e -> newFile(tabs, tabbedPane, this));
         nextTab.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK));
         nextTab.addActionListener(e -> {
 		if (tabbedPane.getSelectedIndex() + 1 < tabbedPane.getTabCount()){
@@ -70,10 +69,13 @@ public class Gui extends JFrame{
 
 	// openItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
 	// openItem.addActionListener(e -> openFile(editor, this));
-	// saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
-	// saveItem.addActionListener(e -> saveFile(editor, this));
-	// quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
-	// quitItem.addActionListener(e -> dispose());
+	
+	saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
+	saveItem.addActionListener(e -> saveFile(tabs, tabbedPane, this));
+	
+	quitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, KeyEvent.CTRL_DOWN_MASK));
+	quitItem.addActionListener(e -> dispose());
+	
 	commandLine.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -100,8 +102,7 @@ public class Gui extends JFrame{
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
     }
-
-    private static Object newFile(ArrayList openFiles, JTabbedPane tabbedPane, JFrame frame) {
+    private static Object newFile(ArrayList<Tab> tabs, JTabbedPane tabbedPane, JFrame frame) {
 	String path = saveFileDialog(frame);
 	try {
 	    File myFile = new File(path);
@@ -111,9 +112,7 @@ public class Gui extends JFrame{
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(new JScrollPane(new JTextPane()), BorderLayout.CENTER);
 		tabbedPane.addTab(myFile.getName(), panel);
-		if (!openFiles.contains(myFile.getName())){
-		    openFiles.add(myFile.getName());
-		}
+		tabs.add(new Tab(myFile.getName(), false, "", path));
             } else {
                 System.out.println("File already exists");
             }
@@ -125,12 +124,16 @@ public class Gui extends JFrame{
 	return null;
     }
 
-    private static Object saveFile(JTextPane editor, JFrame frame) {
-	String path = saveFileDialog(frame);
+    private static Object saveFile(ArrayList<Tab> tabs, JTabbedPane tabbedPane, JFrame frame) {
 	try {
+	    String path = tabs.get(tabbedPane.getSelectedIndex()).path;
+	    JPanel panel = (JPanel) tabbedPane.getSelectedComponent();
+	    JTextPane textPane =  panel.getComponent(1);
 	    FileWriter fWriter = new FileWriter(path);
-	    fWriter.write(editor.getText());
+	    fWriter.write(text);
+	    System.out.println(text);
 	    fWriter.close();
+     
 	} catch (IOException e) {
 	    System.out.println("Err: Can't write to file");
 	    e.printStackTrace();
